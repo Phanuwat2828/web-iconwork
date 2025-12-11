@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technology Stack Badge Generator Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid #eaeaea;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-top: 10px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 2fr 3fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* หมวดหมู่เทคโนโลยี */
+        .tech-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-color: #4a6ee0;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .category-icon {
+            width: 28px;
+            height: 28px;
+            color: #4a6ee0;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .tech-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tech-item:hover {
+            border-color: #4a6ee0;
+            background: #f0f4ff;
+        }
+
+        .tech-item.selected {
+            background: #e8f0fe;
+            border-color: #4a6ee0;
+            box-shadow: 0 0 0 3px rgba(74, 110, 224, 0.1);
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #adb5bd;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .checkbox.checked {
+            background: #4a6ee0;
+            border-color: #4a6ee0;
+        }
+
+        .checkbox.checked::after {
+            content: "✓";
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .tech-name {
+            font-size: 0.95rem;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        /* พรีวิวและเอาท์พุท */
+        .preview-section {
+            position: sticky;
+            top: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge-preview {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            min-height: 150px;
+            margin-bottom: 25px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .code-output-container {
+            margin-bottom: 25px;
+        }
+
+        .code-output {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .copy-btn {
+            background: #4a6ee0;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: #3a5ed0;
+            transform: translateY(-2px);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        /* สถิติและคอนโทรล */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4a6ee0;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #4a6ee0;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* หมวดหมู่เพิ่มเติม */
+        .extra-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        /* ฟิลเตอร์ค้นหา */
+        .search-container {
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #4a6ee0;
+            box-shadow: 0 0 0 3px rgba(74, 110, 224, 0.1);
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .filter-tag {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-tag.active {
+            background: #4a6ee0;
+            color: white;
+            border-color: #4a6ee0;
+        }
+
+        .filter-tag:hover {
+            background: #e9ecef;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #eaeaea;
+            margin-top: 60px;
+            color: #7f8c8d;
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+            border-left: 4px solid #4a6ee0;
+        }
+
+        .instructions h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                <i class="fas fa-layer-group"></i>
+                Technology Stack Badge Generator Pro
+                <i class="fas fa-bolt"></i>
+            </h1>
+            <p class="tagline">เลือกจากเทคโนโลยีกว่า 100+ ชนิด และสร้างโค้ด Markdown สำหรับโปรไฟล์ GitHub ของคุณในคลิกเดียว</p>
+        </header>
+
+        <!-- ฟิลเตอร์ค้นหา -->
+        <div class="search-container">
+            <input type="text" class="search-box" id="search-box" placeholder="🔍 ค้นหาเทคโนโลยี (React, Python, Docker, etc.)" onkeyup="filterTechnologies()">
+            <div class="filter-tags" id="filter-tags">
+                <span class="filter-tag active" onclick="filterByCategory('all')">ทั้งหมด</span>
+                <span class="filter-tag" onclick="filterByCategory('frontend')">Frontend</span>
+                <span class="filter-tag" onclick="filterByCategory('backend')">Backend</span>
+                <span class="filter-tag" onclick="filterByCategory('database')">Database</span>
+                <span class="filter-tag" onclick="filterByCategory('cloud')">Cloud</span>
+                <span class="filter-tag" onclick="filterByCategory('mobile')">Mobile</span>
+                <span class="filter-tag" onclick="filterByCategory('tools')">Tools</span>
+                <span class="filter-tag" onclick="filterByCategory('ai')">AI/ML</span>
+            </div>
+        </div>
+
+        <!-- หมวดหมู่หลัก -->
+        <div class="tech-categories" id="tech-categories">
+            <!-- หมวดหมู่จะถูกสร้างด้วย JavaScript -->
+        </div>
+
+        <!-- พรีวิวและเอาท์พุท -->
+        <div class="preview-section">
+            <h2 class="section-title"><i class="fas fa-eye"></i> ตัวอย่าง Badges</h2>
+            <div class="badge-preview">
+                <div class="badge-container" id="badge-container">
+                    <p style="color: #6c757d; text-align: center; width: 100%;">เลือกเทคโนโลยีจากด้านบนเพื่อดูตัวอย่าง</p>
+                </div>
+            </div>
+
+            <div class="code-output-container">
+                <div class="code-header">
+                    <h2 class="section-title"><i class="fas fa-code"></i> โค้ด Markdown</h2>
+                    <button class="copy-btn" onclick="copyToClipboard()">
+                        <i class="fas fa-copy"></i> คัดลอกโค้ด
+                    </button>
+                </div>
+                <div class="code-output" id="code-output">
+// เลือกเทคโนโลยีจากด้านบนเพื่อสร้างโค้ด
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="selected-count">0</div>
+                    <div class="stat-label">เทคโนโลยีที่เลือก</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="line-count">0</div>
+                    <div class="stat-label">บรรทัดโค้ด</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="char-count">0</div>
+                    <div class="stat-label">ตัวอักษร</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="category-count">0</div>
+                    <div class="stat-label">หมวดหมู่</div>
+                </div>
+            </div>
+
+
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> วิธีการใช้งาน</h3>
+                <ol>
+                    <li><strong>ค้นหาและเลือกเทคโนโลยี</strong> ที่คุณใช้จากรายการด้านบน</li>
+                    <li><strong>ดูตัวอย่าง Badges</strong> ที่ถูกสร้างขึ้นแบบเรียลไทม์</li>
+                    <li><strong>คัดลอกโค้ด Markdown</strong> โดยคลิกปุ่ม "คัดลอกโค้ด"</li>
+                    <li><strong>วางโค้ดในไฟล์ README.md</strong> ของคุณบน GitHub</li>
+                    <li><strong>อัปเดตโปรไฟล์ GitHub</strong> ของคุณให้ดูโปรไฟชั่นแนล</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // เทคโนโลยีทั้งหมด (กว่า 100+ ชนิด)
+        const technologies = [
+            // Frontend Frameworks & Libraries
+            { id: 'react', name: 'React', category: 'frontend', badge: 'https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB' },
+            { id: 'vue', name: 'Vue.js', category: 'frontend', badge: 'https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D' },
+            { id: 'angular', name: 'Angular', category: 'frontend', badge: 'https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white' },
+            { id: 'svelte', name: 'Svelte', category: 'frontend', badge: 'https://img.shields.io/badge/Svelte-FF3E00?style=for-the-badge&logo=svelte&logoColor=white' },
+            { id: 'nextjs', name: 'Next.js', category: 'frontend', badge: 'https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white' },
+            { id: 'nuxtjs', name: 'Nuxt.js', category: 'frontend', badge: 'https://img.shields.io/badge/Nuxt.js-00C58E?style=for-the-badge&logo=nuxtdotjs&logoColor=white' },
+            { id: 'gatsby', name: 'Gatsby', category: 'frontend', badge: 'https://img.shields.io/badge/Gatsby-663399?style=for-the-badge&logo=gatsby&logoColor=white' },
+            { id: 'solidjs', name: 'SolidJS', category: 'frontend', badge: 'https://img.shields.io/badge/SolidJS-2C4F7C?style=for-the-badge&logo=solid&logoColor=white' },
+            { id: 'qwik', name: 'Qwik', category: 'frontend', badge: 'https://img.shields.io/badge/Qwik-4285F4?style=for-the-badge&logo=qwik&logoColor=white' },
+            { id: 'astro', name: 'Astro', category: 'frontend', badge: 'https://img.shields.io/badge/Astro-BC52EE?style=for-the-badge&logo=astro&logoColor=white' },
+            
+            // JavaScript & TypeScript
+            { id: 'javascript', name: 'JavaScript', category: 'frontend', badge: 'https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black' },
+            { id: 'typescript', name: 'TypeScript', category: 'frontend', badge: 'https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white' },
+            { id: 'nodejs', name: 'Node.js', category: 'backend', badge: 'https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white' },
+            { id: 'deno', name: 'Deno', category: 'backend', badge: 'https://img.shields.io/badge/Deno-000000?style=for-the-badge&logo=deno&logoColor=white' },
+            { id: 'bun', name: 'Bun', category: 'backend', badge: 'https://img.shields.io/badge/Bun-333333?style=for-the-badge&logo=bun&logoColor=white' },
+            
+            // Backend Frameworks
+            { id: 'express', name: 'Express.js', category: 'backend', badge: 'https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white' },
+            { id: 'nestjs', name: 'NestJS', category: 'backend', badge: 'https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white' },
+            { id: 'fastify', name: 'Fastify', category: 'backend', badge: 'https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white' },
+            { id: 'koa', name: 'Koa', category: 'backend', badge: 'https://img.shields.io/badge/Koa-33333D?style=for-the-badge&logo=koa&logoColor=white' },
+            
+            // Python
+            { id: 'python', name: 'Python', category: 'backend', badge: 'https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white' },
+            { id: 'django', name: 'Django', category: 'backend', badge: 'https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white' },
+            { id: 'flask', name: 'Flask', category: 'backend', badge: 'https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white' },
+            { id: 'fastapi', name: 'FastAPI', category: 'backend', badge: 'https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white' },
+            { id: 'pydantic', name: 'Pydantic', category: 'backend', badge: 'https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&logo=pydantic&logoColor=white' },
+            
+            // Java & Kotlin
+            { id: 'java', name: 'Java', category: 'backend', badge: 'https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white' },
+            { id: 'spring', name: 'Spring', category: 'backend', badge: 'https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white' },
+            { id: 'kotlin', name: 'Kotlin', category: 'backend', badge: 'https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white' },
+            
+            // .NET & C#
+            { id: 'csharp', name: 'C#', category: 'backend', badge: 'https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white' },
+            { id: 'dotnet', name: '.NET', category: 'backend', badge: 'https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white' },
+            { id: 'aspnet', name: 'ASP.NET', category: 'backend', badge: 'https://img.shields.io/badge/ASP.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white' },
+            
+            // PHP
+            { id: 'php', name: 'PHP', category: 'backend', badge: 'https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white' },
+            { id: 'laravel', name: 'Laravel', category: 'backend', badge: 'https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white' },
+            { id: 'symfony', name: 'Symfony', category: 'backend', badge: 'https://img.shields.io/badge/Symfony-000000?style=for-the-badge&logo=symfony&logoColor=white' },
+            
+            // Go & Rust
+            { id: 'golang', name: 'Go', category: 'backend', badge: 'https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white' },
+            { id: 'rust', name: 'Rust', category: 'backend', badge: 'https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white' },
+            { id: 'actix', name: 'Actix', category: 'backend', badge: 'https://img.shields.io/badge/Actix-000000?style=for-the-badge&logo=actix&logoColor=white' },
+            
+            // Databases
+            { id: 'mysql', name: 'MySQL', category: 'database', badge: 'https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white' },
+            { id: 'postgresql', name: 'PostgreSQL', category: 'database', badge: 'https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white' },
+            { id: 'mongodb', name: 'MongoDB', category: 'database', badge: 'https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white' },
+            { id: 'redis', name: 'Redis', category: 'database', badge: 'https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white' },
+            { id: 'sqlite', name: 'SQLite', category: 'database', badge: 'https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white' },
+            { id: 'oracle', name: 'Oracle', category: 'database', badge: 'https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white' },
+            { id: 'mariadb', name: 'MariaDB', category: 'database', badge: 'https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white' },
+            { id: 'cassandra', name: 'Cassandra', category: 'database', badge: 'https://img.shields.io/badge/Cassandra-1287B1?style=for-the-badge&logo=apache-cassandra&logoColor=white' },
+            { id: 'elasticsearch', name: 'Elasticsearch', category: 'database', badge: 'https://img.shields.io/badge/Elasticsearch-005571?style=for-the-badge&logo=elasticsearch&logoColor=white' },
+            { id: 'firebase', name: 'Firebase', category: 'database', badge: 'https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black' },
+            { id: 'supabase', name: 'Supabase', category: 'database', badge: 'https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white' },
+            
+            // Cloud Platforms
+            { id: 'aws', name: 'AWS', category: 'cloud', badge: 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+            { id: 'azure', name: 'Azure', category: 'cloud', badge: 'https://img.shields.io/badge/Azure-0089D6?style=for-the-badge&logo=microsoft-azure&logoColor=white' },
+            { id: 'gcp', name: 'Google Cloud', category: 'cloud', badge: 'https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white' },
+            { id: 'digitalocean', name: 'DigitalOcean', category: 'cloud', badge: 'https://img.shields.io/badge/DigitalOcean-0080FF?style=for-the-badge&logo=digitalocean&logoColor=white' },
+            { id: 'heroku', name: 'Heroku', category: 'cloud', badge: 'https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white' },
+            { id: 'vercel', name: 'Vercel', category: 'cloud', badge: 'https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white' },
+            { id: 'netlify', name: 'Netlify', category: 'cloud', badge: 'https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white' },
+            { id: 'cloudflare', name: 'Cloudflare', category: 'cloud', badge: 'https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=cloudflare&logoColor=white' },
+            
+            // Mobile Development
+            { id: 'reactnative', name: 'React Native', category: 'mobile', badge: 'https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB' },
+            { id: 'flutter', name: 'Flutter', category: 'mobile', badge: 'https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white' },
+            { id: 'android', name: 'Android', category: 'mobile', badge: 'https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white' },
+            { id: 'ios', name: 'iOS', category: 'mobile', badge: 'https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white' },
+            { id: 'swift', name: 'Swift', category: 'mobile', badge: 'https://img.shields.io/badge/Swift-FA7343?style=for-the-badge&logo=swift&logoColor=white' },
+            { id: 'kotlinandroid', name: 'Kotlin Android', category: 'mobile', badge: 'https://img.shields.io/badge/Kotlin-Android-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white' },
+            { id: 'ionic', name: 'Ionic', category: 'mobile', badge: 'https://img.shields.io/badge/Ionic-3880FF?style=for-the-badge&logo=ionic&logoColor=white' },
+            { id: 'capacitor', name: 'Capacitor', category: 'mobile', badge: 'https://img.shields.io/badge/Capacitor-119EFF?style=for-the-badge&logo=capacitor&logoColor=white' },
+            
+            // DevOps & Tools
+            { id: 'docker', name: 'Docker', category: 'tools', badge: 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white' },
+            { id: 'kubernetes', name: 'Kubernetes', category: 'tools', badge: 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white' },
+            { id: 'terraform', name: 'Terraform', category: 'tools', badge: 'https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white' },
+            { id: 'ansible', name: 'Ansible', category: 'tools', badge: 'https://img.shields.io/badge/Ansible-000000?style=for-the-badge&logo=ansible&logoColor=white' },
+            { id: 'jenkins', name: 'Jenkins', category: 'tools', badge: 'https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white' },
+            { id: 'gitlab', name: 'GitLab', category: 'tools', badge: 'https://img.shields.io/badge/GitLab-330F63?style=for-the-badge&logo=gitlab&logoColor=white' },
+            { id: 'githubactions', name: 'GitHub Actions', category: 'tools', badge: 'https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white' },
+            { id: 'nginx', name: 'Nginx', category: 'tools', badge: 'https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white' },
+            { id: 'apache', name: 'Apache', category: 'tools', badge: 'https://img.shields.io/badge/Apache-D22128?style=for-the-badge&logo=apache&logoColor=white' },
+            
+            // Version Control
+            { id: 'git', name: 'Git', category: 'tools', badge: 'https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white' },
+            { id: 'github', name: 'GitHub', category: 'tools', badge: 'https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white' },
+            { id: 'bitbucket', name: 'Bitbucket', category: 'tools', badge: 'https://img.shields.io/badge/Bitbucket-0052CC?style=for-the-badge&logo=bitbucket&logoColor=white' },
+            
+            // IDEs & Editors
+            { id: 'vscode', name: 'VS Code', category: 'tools', badge: 'https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white' },
+            { id: 'intellij', name: 'IntelliJ IDEA', category: 'tools', badge: 'https://img.shields.io/badge/IntelliJ_IDEA-000000?style=for-the-badge&logo=intellij-idea&logoColor=white' },
+            { id: 'pycharm', name: 'PyCharm', category: 'tools', badge: 'https://img.shields.io/badge/PyCharm-000000?style=for-the-badge&logo=pycharm&logoColor=white' },
+            { id: 'webstorm', name: 'WebStorm', category: 'tools', badge: 'https://img.shields.io/badge/WebStorm-000000?style=for-the-badge&logo=webstorm&logoColor=white' },
+            { id: 'androidstudio', name: 'Android Studio', category: 'tools', badge: 'https://img.shields.io/badge/Android_Studio-3DDC84?style=for-the-badge&logo=android-studio&logoColor=white' },
+            { id: 'xcode', name: 'Xcode', category: 'tools', badge: 'https://img.shields.io/badge/Xcode-147EFB?style=for-the-badge&logo=xcode&logoColor=white' },
+            
+            // Design Tools
+            { id: 'figma', name: 'Figma', category: 'tools', badge: 'https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white' },
+            { id: 'adobexd', name: 'Adobe XD', category: 'tools', badge: 'https://img.shields.io/badge/Adobe%20XD-470137?style=for-the-badge&logo=adobe%20xd&logoColor=white' },
+            { id: 'sketch', name: 'Sketch', category: 'tools', badge: 'https://img.shields.io/badge/Sketch-F7B500?style=for-the-badge&logo=sketch&logoColor=black' },
+            { id: 'photoshop', name: 'Photoshop', category: 'tools', badge: 'https://img.shields.io/badge/Photoshop-31A8FF?style=for-the-badge&logo=adobephotoshop&logoColor=white' },
+            { id: 'illustrator', name: 'Illustrator', category: 'tools', badge: 'https://img.shields.io/badge/Illustrator-FF9A00?style=for-the-badge&logo=adobeillustrator&logoColor=white' },
+            
+            // Testing
+            { id: 'jest', name: 'Jest', category: 'tools', badge: 'https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white' },
+            { id: 'cypress', name: 'Cypress', category: 'tools', badge: 'https://img.shields.io/badge/Cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white' },
+            { id: 'selenium', name: 'Selenium', category: 'tools', badge: 'https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white' },
+            { id: 'testinglibrary', name: 'Testing Library', category: 'tools', badge: 'https://img.shields.io/badge/Testing_Library-E33332?style=for-the-badge&logo=testing-library&logoColor=white' },
+            { id: 'mocha', name: 'Mocha', category: 'tools', badge: 'https://img.shields.io/badge/Mocha-8D6748?style=for-the-badge&logo=mocha&logoColor=white' },
+            { id: 'pytest', name: 'Pytest', category: 'tools', badge: 'https://img.shields.io/badge/pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white' },
+            
+            // CSS Frameworks
+            { id: 'tailwind', name: 'Tailwind CSS', category: 'frontend', badge: 'https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white' },
+            { id: 'bootstrap', name: 'Bootstrap', category: 'frontend', badge: 'https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white' },
+            { id: 'mui', name: 'Material UI', category: 'frontend', badge: 'https://img.shields.io/badge/Material%20UI-007FFF?style=for-the-badge&logo=mui&logoColor=white' },
+            { id: 'chakraui', name: 'Chakra UI', category: 'frontend', badge: 'https://img.shields.io/badge/Chakra%20UI-319795?style=for-the-badge&logo=chakra-ui&logoColor=white' },
+            { id: 'sass', name: 'Sass', category: 'frontend', badge: 'https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white' },
+            { id: 'less', name: 'Less', category: 'frontend', badge: 'https://img.shields.io/badge/Less-1D365D?style=for-the-badge&logo=less&logoColor=white' },
+            { id: 'styledcomponents', name: 'Styled Components', category: 'frontend', badge: 'https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white' },
+            
+            // AI/ML & Data Science
+            { id: 'tensorflow', name: 'TensorFlow', category: 'ai', badge: 'https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white' },
+            { id: 'pytorch', name: 'PyTorch', category: 'ai', badge: 'https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white' },
+            { id: 'pandas', name: 'Pandas', category: 'ai', badge: 'https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white' },
+            { id: 'numpy', name: 'NumPy', category: 'ai', badge: 'https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white' },
+            { id: 'scikitlearn', name: 'scikit-learn', category: 'ai', badge: 'https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white' },
+            { id: 'opencv', name: 'OpenCV', category: 'ai', badge: 'https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white' },
+            { id: 'jupyter', name: 'Jupyter', category: 'ai', badge: 'https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white' },
+            { id: 'huggingface', name: 'Hugging Face', category: 'ai', badge: 'https://img.shields.io/badge/Hugging%20Face-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black' },
+            
+            // Operating Systems
+            { id: 'linux', name: 'Linux', category: 'tools', badge: 'https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black' },
+            { id: 'ubuntu', name: 'Ubuntu', category: 'tools', badge: 'https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white' },
+            { id: 'windows', name: 'Windows', category: 'tools', badge: 'https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white' },
+            { id: 'macos', name: 'macOS', category: 'tools', badge: 'https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=macos&logoColor=white' },
+            
+            // Package Managers
+            { id: 'npm', name: 'npm', category: 'tools', badge: 'https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white' },
+            { id: 'yarn', name: 'Yarn', category: 'tools', badge: 'https://img.shields.io/badge/Yarn-2C8EBB?style=for-the-badge&logo=yarn&logoColor=white' },
+            { id: 'pnpm', name: 'pnpm', category: 'tools', badge: 'https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white' },
+            { id: 'pip', name: 'pip', category: 'tools', badge: 'https://img.shields.io/badge/pip-3776AB?style=for-the-badge&logo=pypi&logoColor=white' },
+            { id: 'homebrew', name: 'Homebrew', category: 'tools', badge: 'https://img.shields.io/badge/Homebrew-FBB040?style=for-the-badge&logo=homebrew&logoColor=black' },
+            
+            // APIs & Protocols
+            { id: 'graphql', name: 'GraphQL', category: 'tools', badge: 'https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white' },
+            { id: 'restapi', name: 'REST API', category: 'tools', badge: 'https://img.shields.io/badge/REST%20API-FF6F61?style=for-the-badge&logo=rest&logoColor=white' },
+            { id: 'websocket', name: 'WebSocket', category: 'tools', badge: 'https://img.shields.io/badge/WebSocket-010101?style=for-the-badge&logo=websocket&logoColor=white' },
+            
+            // Build Tools
+            { id: 'webpack', name: 'Webpack', category: 'tools', badge: 'https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=webpack&logoColor=black' },
+            { id: 'vite', name: 'Vite', category: 'tools', badge: 'https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white' },
+            { id: 'rollup', name: 'Rollup', category: 'tools', badge: 'https://img.shields.io/badge/Rollup-EC4A3F?style=for-the-badge&logo=rollupdotjs&logoColor=white' },
+            { id: 'babel', name: 'Babel', category: 'tools', badge: 'https://img.shields.io/badge/Babel-F9DC3E?style=for-the-badge&logo=babel&logoColor=black' },
+            { id: 'eslint', name: 'ESLint', category: 'tools', badge: 'https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white' },
+            { id: 'prettier', name: 'Prettier', category: 'tools', badge: 'https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=black' },
+            
+            // Project Management
+            { id: 'jira', name: 'Jira', category: 'tools', badge: 'https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&logoColor=white' },
+            { id: 'trello', name: 'Trello', category: 'tools', badge: 'https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white' },
+            { id: 'notion', name: 'Notion', category: 'tools', badge: 'https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white' },
+            { id: 'slack', name: 'Slack', category: 'tools', badge: 'https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white' },
+            { id: 'discord', name: 'Discord', category: 'tools', badge: 'https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white' },
+            
+            // CMS & E-commerce
+            { id: 'wordpress', name: 'WordPress', category: 'tools', badge: 'https://img.shields.io/badge/WordPress-21759B?style=for-the-badge&logo=wordpress&logoColor=white' },
+            { id: 'shopify', name: 'Shopify', category: 'tools', badge: 'https://img.shields.io/badge/Shopify-7AB55C?style=for-the-badge&logo=shopify&logoColor=white' },
+            { id: 'woocommerce', name: 'WooCommerce', category: 'tools', badge: 'https://img.shields.io/badge/WooCommerce-96588A?style=for-the-badge&logo=woocommerce&logoColor=white' },
+            
+            // Blockchain
+            { id: 'ethereum', name: 'Ethereum', category: 'ai', badge: 'https://img.shields.io/badge/Ethereum-3C3C3D?style=for-the-badge&logo=ethereum&logoColor=white' },
+            { id: 'solidity', name: 'Solidity', category: 'ai', badge: 'https://img.shields.io/badge/Solidity-363636?style=for-the-badge&logo=solidity&logoColor=white' },
+            { id: 'web3', name: 'Web3.js', category: 'ai', badge: 'https://img.shields.io/badge/Web3.js-F16822?style=for-the-badge&logo=web3dotjs&logoColor=white' }
+        ];
+
+        // หมวดหมู่และไอคอน
+        const categoryConfig = {
+            frontend: { title: 'Frontend', icon: 'fas fa-desktop' },
+            backend: { title: 'Backend', icon: 'fas fa-server' },
+            database: { title: 'Database', icon: 'fas fa-database' },
+            cloud: { title: 'Cloud', icon: 'fas fa-cloud' },
+            mobile: { title: 'Mobile', icon: 'fas fa-mobile-alt' },
+            tools: { title: 'Tools', icon: 'fas fa-tools' },
+            ai: { title: 'AI/ML', icon: 'fas fa-robot' }
+        };
+
+        // ตัวแปรเก็บเทคโนโลยีที่เลือก
+        let selectedTech = new Set();
+        let currentCategoryFilter = 'all';
+
+        // เริ่มต้นแสดงเทคโนโลยี
+        function init() {
+            renderCategories();
+            updatePreview();
+            selectDefaultTech();
+            updateStats();
+        }
+
+        // แสดงหมวดหมู่ทั้งหมด
+        function renderCategories() {
+            const container = document.getElementById('tech-categories');
+            container.innerHTML = '';
+            
+            // แสดงตามหมวดหมู่ที่กำหนด
+            Object.entries(categoryConfig).forEach(([categoryKey, categoryInfo]) => {
+                const categoryTech = technologies.filter(tech => tech.category === categoryKey);
+                
+                if (categoryTech.length > 0) {
+                    const categoryCard = document.createElement('div');
+                    categoryCard.className = 'category-card';
+                    categoryCard.id = `category-${categoryKey}`;
+                    
+                    categoryCard.innerHTML = `
+                        <div class="category-header">
+                            <i class="${categoryInfo.icon} category-icon"></i>
+                            <h3 class="category-title">${categoryInfo.title} (${categoryTech.length})</h3>
+                        </div>
+                        <div class="tech-grid">
+                            ${categoryTech.map(tech => `
+                                <div class="tech-item" data-id="${tech.id}" onclick="toggleTech('${tech.id}')">
+                                    <div class="checkbox ${selectedTech.has(tech.id) ? 'checked' : ''}"></div>
+                                    <span class="tech-name">${tech.name}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    
+                    container.appendChild(categoryCard);
+                }
+            });
+        }
+
+        // เลือกเทคโนโลยีเริ่มต้นบางตัว
+        function selectDefaultTech() {
+            const defaults = ['react', 'vue', 'javascript', 'nodejs', 'python', 'git', 'github', 'vscode', 'docker'];
+            defaults.forEach(id => {
+                if (!selectedTech.has(id)) {
+                    toggleTech(id);
+                }
+            });
+        }
+
+        // สลับการเลือกเทคโนโลยี
+        function toggleTech(techId) {
+            if (selectedTech.has(techId)) {
+                selectedTech.delete(techId);
+            } else {
+                selectedTech.add(techId);
+            }
+            
+            // อัพเดต UI
+            const techItem = document.querySelector(`[data-id="${techId}"]`);
+            if (techItem) {
+                const checkbox = techItem.querySelector('.checkbox');
+                techItem.classList.toggle('selected');
+                checkbox.classList.toggle('checked');
+            }
+            
+            updatePreview();
+        }
+
+        // อัพเดตพรีวิว
+        function updatePreview() {
+            const badgeContainer = document.getElementById('badge-container');
+            const codeOutput = document.getElementById('code-output');
+            
+            // ล้างพรีวิวเก่า
+            badgeContainer.innerHTML = '';
+            
+            if (selectedTech.size === 0) {
+                badgeContainer.innerHTML = '<p style="color: #6c757d; text-align: center; width: 100%;">เลือกเทคโนโลยีจากด้านบนเพื่อดูตัวอย่าง</p>';
+                codeOutput.textContent = '// เลือกเทคโนโลยีจากด้านบนเพื่อสร้างโค้ด';
+                updateStats();
+                return;
+            }
+            
+            // แสดง badges ที่เลือก
+            Array.from(selectedTech).forEach(techId => {
+                const tech = technologies.find(t => t.id === techId);
+                if (tech) {
+                    const img = document.createElement('img');
+                    img.src = tech.badge;
+                    img.alt = tech.name;
+                    img.title = tech.name;
+                    img.style.margin = '2px';
+                    badgeContainer.appendChild(img);
+                }
+            });
+            
+            // สร้างโค้ด Markdown
+            let markdownCode = '';
+            Array.from(selectedTech).forEach(techId => {
+                const tech = technologies.find(t => t.id === techId);
+                if (tech) {
+                    markdownCode += `![${tech.name}](${tech.badge})\n`;
+                }
+            });
+            
+            codeOutput.textContent = markdownCode.trim();
+            updateStats();
+        }
+
+        // อัพเดตสถิติ
+        function updateStats() {
+            document.getElementById('selected-count').textContent = selectedTech.size;
+            
+            const codeText = document.getElementById('code-output').textContent;
+            const lines = codeText.split('\n').filter(line => line.trim()).length;
+            document.getElementById('line-count').textContent = lines;
+            document.getElementById('char-count').textContent = codeText.length;
+            
+            // นับหมวดหมู่ที่เลือก
+            const selectedCategories = new Set();
+            Array.from(selectedTech).forEach(techId => {
+                const tech = technologies.find(t => t.id === techId);
+                if (tech) {
+                    selectedCategories.add(tech.category);
+                }
+            });
+            document.getElementById('category-count').textContent = selectedCategories.size;
+        }
+
+        // คัดลอกโค้ด
+        function copyToClipboard() {
+            const codeOutput = document.getElementById('code-output');
+            const codeText = codeOutput.textContent;
+            
+            if (codeText === '// เลือกเทคโนโลยีจากด้านบนเพื่อสร้างโค้ด' || codeText.trim() === '') {
+                alert('กรุณาเลือกเทคโนโลยีอย่างน้อย 1 อย่างก่อนคัดลอกโค้ด');
+                return;
+            }
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                alert('คัดลอกโค้ดไปยังคลิปบอร์ดแล้ว! 🎉\nตอนนี้คุณสามารถวางโค้ดใน README.md ของคุณได้');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('เกิดข้อผิดพลาดในการคัดลอกโค้ด');
+            });
+        }
+
+        // ล้างการเลือกทั้งหมด
+        function clearSelection() {
+            selectedTech.clear();
+            document.querySelectorAll('.tech-item').forEach(item => {
+                item.classList.remove('selected');
+                item.querySelector('.checkbox').classList.remove('checked');
+            });
+            updatePreview();
+        }
+
+        // เลือกทั้งหมด
+        function selectAll() {
+            technologies.forEach(tech => {
+                selectedTech.add(tech.id);
+                const techItem = document.querySelector(`[data-id="${tech.id}"]`);
+                if (techItem) {
+                    techItem.classList.add('selected');
+                    techItem.querySelector('.checkbox').classList.add('checked');
+                }
+            });
+            updatePreview();
+        }
+
+        // สุ่มเลือก
+        function generateRandom() {
+            clearSelection();
+            const randomCount = Math.floor(Math.random() * 15) + 5; // สุ่ม 5-20 ตัว
+            
+            for (let i = 0; i < randomCount; i++) {
+                const randomIndex = Math.floor(Math.random() * technologies.length);
+                const randomTech = technologies[randomIndex];
+                selectedTech.add(randomTech.id);
+                
+                const techItem = document.querySelector(`[data-id="${randomTech.id}"]`);
+                if (techItem) {
+                    techItem.classList.add('selected');
+                    techItem.querySelector('.checkbox').classList.add('checked');
+                }
+            }
+            
+            updatePreview();
+        }
+
+        // ฟิลเตอร์ตามหมวดหมู่
+        function filterByCategory(category) {
+            currentCategoryFilter = category;
+            
+            // อัพเดตปุ่ม filter
+            document.querySelectorAll('.filter-tag').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // ซ่อน/แสดงหมวดหมู่
+            document.querySelectorAll('.category-card').forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    const cardCategory = card.id.replace('category-', '');
+                    card.style.display = cardCategory === category ? 'block' : 'none';
+                }
+            });
+        }
+
+        // ค้นหาเทคโนโลยี
+        function filterTechnologies() {
+            const searchTerm = document.getElementById('search-box').value.toLowerCase();
+            
+            document.querySelectorAll('.tech-item').forEach(item => {
+                const techName = item.querySelector('.tech-name').textContent.toLowerCase();
+                const parentCategory = item.closest('.category-card');
+                
+                if (techName.includes(searchTerm) || searchTerm === '') {
+                    item.style.display = 'flex';
+                    if (parentCategory && searchTerm !== '') {
+                        parentCategory.style.display = 'block';
+                    }
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // ซ่อนหมวดหมู่ที่ไม่มีผลลัพธ์ (เฉพาะเมื่อค้นหา)
+            if (searchTerm !== '') {
+                document.querySelectorAll('.category-card').forEach(card => {
+                    const hasVisibleItems = card.querySelectorAll('.tech-item[style*="display: flex"]').length > 0;
+                    card.style.display = hasVisibleItems ? 'block' : 'none';
+                });
+            } else if (currentCategoryFilter === 'all') {
+                document.querySelectorAll('.category-card').forEach(card => {
+                    card.style.display = 'block';
+                });
+            }
+        }
+
+        // เริ่มต้นแอป
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
