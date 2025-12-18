@@ -28,7 +28,7 @@
             text-align: center;
             padding: 30px 20px;
             margin-bottom: 30px;
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #292929 0%, #424242 100%);
             border-radius: 16px;
             color: white;
             box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2);
@@ -64,7 +64,7 @@
             }
         }
 
-        /* Technology Grid */
+        /* Technology Grid - Pinterest Style */
         .tech-section {
             background: white;
             border-radius: 16px;
@@ -83,6 +83,7 @@
 
         .search-container {
             margin-bottom: 20px;
+            position: relative;
         }
 
         .search-box {
@@ -102,94 +103,174 @@
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
 
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 5px;
-            max-height: 1500px;
-            overflow-y: auto;
-            padding: 10px;
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
         }
 
-        .tech-item {
-            border-radius: 10px;
-            cursor: pointer;
+        /* Pinterest Style Grid */
+        .tech-masonry {
+            columns: 5 200px;
+            column-gap: 15px;
+        }
+
+        @media (max-width: 1200px) {
+            .tech-masonry {
+                columns: 4 180px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .tech-masonry {
+                columns: 3 160px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tech-masonry {
+                columns: 2 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tech-masonry {
+                columns: 1 1fr;
+            }
+        }
+
+        .tech-card {
+            break-inside: avoid;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
-            border: 3px solid transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
         }
 
-        .tech-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        .tech-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
         }
 
-        .tech-item.selected {
+        .tech-card.selected {
             border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.15);
         }
 
+        /* Badge Container - Fixed Height */
+        .badge-container {
+            position: relative;
+            overflow: hidden;
+            height: 45px; /* Fixed height for consistency */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+        }
+
+        /* Badge Image - Responsive but consistent */
         .tech-badge {
-            width: 100%;
-            height: auto;
-            border-radius: 6px;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
             display: block;
         }
 
-        .tech-overlay {
+        /* Card Content */
+        .card-content {
+            padding: 12px 15px;
+            background: white;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .tech-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 14px;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .tech-category {
+            font-size: 12px;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        /* Selection Overlay */
+        .selection-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tech-card:hover .selection-overlay {
+            opacity: 1;
+        }
+
+        .tech-card.selected .selection-overlay {
+            opacity: 1;
+            background: #4f46e5;
+            color: white;
+        }
+
+        .selection-icon {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Checkmark when selected */
+        .selected-check {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(79, 70, 229, 0.9);
+            background: rgba(79, 70, 229, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             transition: opacity 0.3s ease;
-            border-radius: 6px;
         }
 
-        .tech-item:hover .tech-overlay {
+        .tech-card.selected .selected-check {
             opacity: 1;
         }
 
-        .tech-check {
-            background: white;
-            color: #4f46e5;
+        .selected-check i {
+            background: #4f46e5;
+            color: white;
             width: 32px;
             height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-        }
-
-        .tech-item.selected .tech-overlay {
-            opacity: 1;
-            background: rgba(79, 70, 229, 0.7);
-        }
-
-        .tech-name {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .tech-item:hover .tech-name {
-            opacity: 1;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
 
         /* Preview Panel */
@@ -400,24 +481,52 @@
             background: #fee2e2;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .tech-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            }
-            
-            .selected-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 480px) {
-            .tech-grid {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        .tech-card {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Filter tabs */
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .filter-btn.active {
+            background: #4f46e5;
+            color: white;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tech-masonry {
+                column-gap: 10px;
             }
             
-            .selected-stats {
-                grid-template-columns: 1fr;
+            .tech-card {
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -446,8 +555,13 @@
                     <input type="text" class="search-box" id="search-box" placeholder="🔍 ค้นหาเทคโนโลยี (React, Python, Docker...)" onkeyup="filterTechnologies()">
                 </div>
                 
-                <div class="tech-grid" id="tech-grid">
-                    <!-- เทคโนโลยีทั้งหมดจะแสดงที่นี่เป็น badges -->
+                <!-- Category Filters -->
+                <div class="category-filters" id="category-filters">
+                    <!-- Categories will be generated dynamically -->
+                </div>
+                
+                <div class="tech-masonry" id="tech-masonry">
+                    <!-- เทคโนโลยีทั้งหมดจะแสดงที่นี่ในรูปแบบ Pinterest -->
                 </div>
             </div>
 
@@ -526,6 +640,81 @@
     <script>
         // ข้อมูลเทคโนโลยี
         const technologies = [
+    
+    // 👩‍💻 Programming Languages
+    { id: 'apachegroovy', name: 'Apache Groovy', category: 'language', badge: 'https://img.shields.io/badge/apache%20Groovy-4298B8?style=for-the-badge&logo=apachegroovy&logoColor=white' },
+    { id: 'c', name: 'C', category: 'language', badge: 'https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white' },
+    { id: 'csharp', name: 'C#', category: 'language', badge: 'https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white' },
+    { id: 'cpp', name: 'C++', category: 'language', badge: 'https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white' },
+    { id: 'clojure', name: 'Clojure', category: 'language', badge: 'https://img.shields.io/badge/Clojure-5881D8?style=for-the-badge&logo=clojure&logoColor=white' },
+    { id: 'coffeescript', name: 'CoffeeScript', category: 'language', badge: 'https://img.shields.io/badge/CoffeeScript-2F2625?style=for-the-badge&logo=CoffeeScript&logoColor=white' },
+    { id: 'crystal', name: 'Crystal', category: 'language', badge: 'https://img.shields.io/badge/Crystal-000000?style=for-the-badge&logo=crystal&logoColor=white' },
+    { id: 'css3', name: 'CSS3', category: 'language', badge: 'https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white' },
+    { id: 'd', name: 'D', category: 'language', badge: 'https://img.shields.io/badge/D-CC342D?style=for-the-badge&logo=d&logoColor=white' },
+    { id: 'dart', name: 'Dart', category: 'language', badge: 'https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white' },
+    { id: 'delphi', name: 'Delphi', category: 'language', badge: 'https://img.shields.io/badge/Delphi-B22222?style=for-the-badge&logo=delphi&logoColor=white' },
+    { id: 'erlang', name: 'Erlang', category: 'language', badge: 'https://img.shields.io/badge/Erlang-A90533?style=for-the-badge&logo=erlang&logoColor=white' },
+    { id: 'go', name: 'Go', category: 'language', badge: 'https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white' },
+    { id: 'haskell', name: 'Haskell', category: 'language', badge: 'https://img.shields.io/badge/Haskell-5D4F85?style=for-the-badge&logo=haskell&logoColor=white' },
+    { id: 'haxe', name: 'Haxe', category: 'language', badge: 'https://img.shields.io/badge/Haxe-EA8220?style=for-the-badge&logo=haxe&logoColor=FFF&labelColor=EA8220' },
+    { id: 'html5', name: 'HTML5', category: 'language', badge: 'https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white' },
+    { id: 'javascript', name: 'JavaScript', category: 'language', badge: 'https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E' },
+    { id: 'json', name: 'JSON', category: 'language', badge: 'https://img.shields.io/badge/json-5E5C5C?style=for-the-badge&logo=json&logoColor=white' },
+    { id: 'kotlin', name: 'Kotlin', category: 'language', badge: 'https://img.shields.io/badge/Kotlin-B125EA?style=for-the-badge&logo=kotlin&logoColor=white' },
+    { id: 'latex', name: 'LaTeX', category: 'language', badge: 'https://img.shields.io/badge/LaTeX-47A141?style=for-the-badge&logo=LaTeX&logoColor=white' },
+    { id: 'lua', name: 'Lua', category: 'language', badge: 'https://img.shields.io/badge/Lua-2C2D72?style=for-the-badge&logo=lua&logoColor=white' },
+    { id: 'mdx', name: 'MDX', category: 'language', badge: 'https://img.shields.io/badge/MDX-1B1F24?style=for-the-badge&logo=mdx&logoColor=white' },
+    { id: 'mojo', name: 'Mojo', category: 'language', badge: 'https://img.shields.io/badge/Mojo-EA8220?style=for-the-badge&logo=fireship&logoColor=red' },
+    { id: 'nim', name: 'Nim', category: 'language', badge: 'https://img.shields.io/badge/Nim-FFE953?style=for-the-badge&logo=nim&logoColor=black' },
+    { id: 'php', name: 'PHP', category: 'language', badge: 'https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white' },
+    { id: 'perl', name: 'Perl', category: 'language', badge: 'https://img.shields.io/badge/Perl-39457E?style=for-the-badge&logo=perl&logoColor=white' },
+    { id: 'plsql', name: 'PL/SQL', category: 'language', badge: 'https://img.shields.io/badge/PLSQL-F80000?style=for-the-badge&logo=oracle&logoColor=black' },
+    { id: 'pug', name: 'Pug', category: 'language', badge: 'https://img.shields.io/badge/Pug-E3C29B?style=for-the-badge&logo=pug&logoColor=black' },
+    { id: 'python', name: 'Python', category: 'language', badge: 'https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue' },
+    { id: 'r', name: 'R', category: 'language', badge: 'https://img.shields.io/badge/R-276DC3?style=for-the-badge&logo=r&logoColor=white' },
+    { id: 'ruby', name: 'Ruby', category: 'language', badge: 'https://img.shields.io/badge/Ruby-CC342D?style=for-the-badge&logo=ruby&logoColor=white' },
+    { id: 'rust', name: 'Rust', category: 'language', badge: 'https://img.shields.io/badge/Rust-black?style=for-the-badge&logo=rust&logoColor=#E57324' },
+    { id: 'scratch', name: 'Scratch', category: 'language', badge: 'https://img.shields.io/badge/Scratch-4D97FF?style=for-the-badge&logo=Scratch&logoColor=white' },
+    { id: 'solidity', name: 'Solidity', category: 'language', badge: 'https://img.shields.io/badge/Solidity-e6e6e6?style=for-the-badge&logo=solidity&logoColor=black' },
+    { id: 'swift', name: 'Swift', category: 'language', badge: 'https://img.shields.io/badge/Swift-FA7343?style=for-the-badge&logo=swift&logoColor=white' },
+    { id: 'typescript', name: 'TypeScript', category: 'language', badge: 'https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white' },
+    { id: 'webassembly', name: 'WebAssembly', category: 'language', badge: 'https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=WebAssembly&logoColor=white' },
+    { id: 'zig', name: 'Zig', category: 'language', badge: 'https://img.shields.io/badge/zig-F7A41D?style=for-the-badge&logo=zig&logoColor=white' },
+    
+    // 📊 Data Science & ML Languages (เพิ่มเติม)
+    { id: 'julia', name: 'Julia', category: 'language', badge: 'https://img.shields.io/badge/Julia-9558B2?style=for-the-badge&logo=julia&logoColor=white' },
+    { id: 'scala', name: 'Scala', category: 'language', badge: 'https://img.shields.io/badge/Scala-DC322F?style=for-the-badge&logo=scala&logoColor=white' },
+    { id: 'matlab', name: 'MATLAB', category: 'language', badge: 'https://img.shields.io/badge/MATLAB-0076A8?style=for-the-badge&logo=mathworks&logoColor=white' },
+    { id: 'fortran', name: 'Fortran', category: 'language', badge: 'https://img.shields.io/badge/fortran-734F96?style=for-the-badge&logo=fortran&logoColor=white' },
+    { id: 'objectivec', name: 'Objective-C', category: 'language', badge: 'https://img.shields.io/badge/Objective--C-3A95E3?style=for-the-badge&logo=apple&logoColor=white' },
+    { id: 'visualbasic', name: 'Visual Basic', category: 'language', badge: 'https://img.shields.io/badge/Visual%20Basic-512BD4?style=for-the-badge&logo=.net&logoColor=white' },
+    { id: 'elixir', name: 'Elixir', category: 'language', badge: 'https://img.shields.io/badge/Elixir-4B275F?style=for-the-badge&logo=elixir&logoColor=white' },
+    { id: 'fsharp', name: 'F#', category: 'language', badge: 'https://img.shields.io/badge/F%23-378BBA?style=for-the-badge&logo=fsharp&logoColor=white' },
+    { id: 'ocaml', name: 'OCaml', category: 'language', badge: 'https://img.shields.io/badge/OCaml-EC6813?style=for-the-badge&logo=ocaml&logoColor=white' },
+    { id: 'racket', name: 'Racket', category: 'language', badge: 'https://img.shields.io/badge/Racket-9F1D20?style=for-the-badge&logo=racket&logoColor=white' },
+    { id: 'vbnet', name: 'VB.NET', category: 'language', badge: 'https://img.shields.io/badge/VB.NET-512BD4?style=for-the-badge&logo=.net&logoColor=white' },
+    
+    // 🎯 Scripting Languages
+    { id: 'powershell', name: 'PowerShell', category: 'language', badge: 'https://img.shields.io/badge/PowerShell-5391FE?style=for-the-badge&logo=powershell&logoColor=white' },
+    { id: 'shellscript', name: 'Shell Script', category: 'language', badge: 'https://img.shields.io/badge/Shell_Script-121011?style=for-the-badge&logo=gnu-bash&logoColor=white' },
+    { id: 'vimscript', name: 'Vim Script', category: 'language', badge: 'https://img.shields.io/badge/Vim%20Script-019733?style=for-the-badge&logo=vim&logoColor=white' },
+    
+    // 🎨 Markup & Styling
+    { id: 'markdown', name: 'Markdown', category: 'language', badge: 'https://img.shields.io/badge/Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white' },
+    { id: 'sass', name: 'Sass', category: 'language', badge: 'https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white' },
+    { id: 'less', name: 'Less', category: 'language', badge: 'https://img.shields.io/badge/Less-1D365D?style=for-the-badge&logo=less&logoColor=white' },
+    { id: 'stylus', name: 'Stylus', category: 'language', badge: 'https://img.shields.io/badge/Stylus-333333?style=for-the-badge&logo=stylus&logoColor=white' },
+    
+    // 🔗 Query Languages
+    { id: 'sql', name: 'SQL', category: 'language', badge: 'https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=postgresql&logoColor=white' },
+    { id: 'graphql', name: 'GraphQL', category: 'language', badge: 'https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white' },
+    { id: 'sparql', name: 'SPARQL', category: 'language', badge: 'https://img.shields.io/badge/SPARQL-0C4597?style=for-the-badge&logo=sparql&logoColor=white' },
+    
+    // ⚡ Modern & Emerging
+    { id: 'gleam', name: 'Gleam', category: 'language', badge: 'https://img.shields.io/badge/Gleam-FFAFF3?style=for-the-badge&logo=gleam&logoColor=black' },
+    { id: 'vlang', name: 'V', category: 'language', badge: 'https://img.shields.io/badge/V-5D87BF?style=for-the-badge&logo=v&logoColor=white' },
+    { id: 'odin', name: 'Odin', category: 'language', badge: 'https://img.shields.io/badge/Odin-60B5CC?style=for-the-badge&logo=odin&logoColor=white' },
+    { id: 'carbon', name: 'Carbon', category: 'language', badge: 'https://img.shields.io/badge/Carbon-000000?style=for-the-badge&logo=carbon&logoColor=white' },
     // 🛠️ Analytics
     { id: 'codecov', name: 'Codecov', category: 'analytics', badge: 'https://img.shields.io/badge/Codecov-F01F7A?style=for-the-badge&logo=Codecov&logoColor=white' },
     { id: 'googleanalytics', name: 'Google Analytics', category: 'analytics', badge: 'https://img.shields.io/badge/Google%20Analytics-E37400?style=for-the-badge&logo=google%20analytics&logoColor=white' },
@@ -1058,45 +1247,122 @@
     { id: 'windows11', name: 'Windows 11', category: 'os', badge: 'https://img.shields.io/badge/Windows_11-0078d4?style=for-the-badge&logo=windows-11&logoColor=white' },
     { id: 'zorinos', name: 'Zorin OS', category: 'os', badge: 'https://img.shields.io/badge/Zorin%20OS-0CC1F3?style=for-the-badge&logo=zorin&logoColor=white' }
 ];
+
         // ตัวแปรเก็บเทคโนโลยีที่เลือก
         let selectedTech = new Set();
         let filteredTech = [...technologies];
-
+        let activeCategory = 'all';
+        
         // เริ่มต้นแอปพลิเคชัน
         function init() {
+            renderCategoryFilters();
             renderAllTech();
             updateStats();
             
             // เลือกเทคโนโลยีเริ่มต้น
-            const defaultTech = [];
+            const defaultTech = ['javascript', 'react', 'nodejs', 'python'];
             defaultTech.forEach(id => {
                 toggleTech(id);
             });
         }
 
-        // แสดงเทคโนโลยีทั้งหมดเป็น Badges
+        // สร้าง category filters
+        function renderCategoryFilters() {
+            const categories = new Set(['all']);
+            technologies.forEach(tech => categories.add(tech.category));
+            
+            const container = document.getElementById('category-filters');
+            container.innerHTML = '';
+            
+            Array.from(categories).forEach(category => {
+                const btn = document.createElement('button');
+                btn.className = `filter-btn ${category === 'all' ? 'active' : ''}`;
+                btn.textContent = getCategoryLabel(category);
+                btn.onclick = () => filterByCategory(category);
+                container.appendChild(btn);
+            });
+        }
+
+        // แปลงชื่อ category
+        function getCategoryLabel(category) {
+            const labels = {
+                'all': 'ทั้งหมด',
+                'language': 'ภาษาโปรแกรม',
+                'frontend': 'Frontend',
+                'backend': 'Backend',
+                'database': 'ฐานข้อมูล',
+                'cloud': 'คลาวด์',
+                'devops': 'DevOps',
+                'mobile': 'มือถือ',
+                'css': 'CSS Frameworks',
+                'tools': 'เครื่องมือ'
+            };
+            return labels[category] || category;
+        }
+
+        // แสดงเทคโนโลยีทั้งหมดในรูปแบบ Pinterest
         function renderAllTech() {
-            const container = document.getElementById('tech-grid');
+            const container = document.getElementById('tech-masonry');
             container.innerHTML = '';
             
             filteredTech.forEach(tech => {
-                const techItem = document.createElement('div');
-                techItem.className = `tech-item ${selectedTech.has(tech.id) ? 'selected' : ''}`;
-                techItem.setAttribute('data-id', tech.id);
-                techItem.onclick = () => toggleTech(tech.id);
-                
-                techItem.innerHTML = `
+                const techCard = createTechCard(tech);
+                container.appendChild(techCard);
+            });
+        }
+
+        // สร้างการ์ดเทคโนโลยี
+        function createTechCard(tech) {
+            const techCard = document.createElement('div');
+            techCard.className = `tech-card ${selectedTech.has(tech.id) ? 'selected' : ''}`;
+            techCard.setAttribute('data-id', tech.id);
+            techCard.onclick = () => toggleTech(tech.id);
+            
+            techCard.innerHTML = `
+                <div class="badge-container">
                     <img src="${tech.badge}" alt="${tech.name}" class="tech-badge">
-                    <div class="tech-overlay">
-                        <div class="tech-check">
+                    <div class="selection-overlay">
+                        <div class="selection-icon">
                             ${selectedTech.has(tech.id) ? '<i class="fas fa-check"></i>' : '+'}
                         </div>
                     </div>
-                     <div class="tech-name">${tech.name}</div>
-                `;
-                
-                container.appendChild(techItem);
+                    ${selectedTech.has(tech.id) ? '<div class="selected-check"><i class="fas fa-check"></i></div>' : ''}
+                </div>
+                <div class="card-content">
+                    <div class="tech-name">${tech.name}</div>
+                    <div class="tech-category">${getCategoryLabel(tech.category)}</div>
+                </div>
+            `;
+            
+            return techCard;
+        }
+
+        // กรองตามหมวดหมู่
+        function filterByCategory(category) {
+            activeCategory = category;
+            
+            // อัพเดตปุ่ม filter
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
+            event.target.classList.add('active');
+            
+            if (category === 'all') {
+                filteredTech = [...technologies];
+            } else {
+                filteredTech = technologies.filter(tech => tech.category === category);
+            }
+            
+            // ค้นหาด้วย
+            const searchTerm = document.getElementById('search-box').value.toLowerCase();
+            if (searchTerm) {
+                filteredTech = filteredTech.filter(tech => 
+                    tech.name.toLowerCase().includes(searchTerm) || 
+                    tech.category.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            renderAllTech();
         }
 
         // สลับการเลือกเทคโนโลยี
@@ -1108,11 +1374,22 @@
             }
             
             // อัพเดต UI
-            const techItem = document.querySelector(`[data-id="${techId}"]`);
-            if (techItem) {
-                techItem.classList.toggle('selected');
-                const checkIcon = techItem.querySelector('.tech-check');
-                checkIcon.innerHTML = selectedTech.has(techId) ? '<i class="fas fa-check"></i>' : '+';
+            const techCard = document.querySelector(`[data-id="${techId}"]`);
+            if (techCard) {
+                techCard.classList.toggle('selected');
+                const overlayIcon = techCard.querySelector('.selection-icon');
+                overlayIcon.innerHTML = selectedTech.has(techId) ? '<i class="fas fa-check"></i>' : '+';
+                
+                // เพิ่มหรือลบ selected-check
+                const selectedCheck = techCard.querySelector('.selected-check');
+                if (selectedTech.has(techId) && !selectedCheck) {
+                    const newCheck = document.createElement('div');
+                    newCheck.className = 'selected-check';
+                    newCheck.innerHTML = '<i class="fas fa-check"></i>';
+                    techCard.querySelector('.badge-container').appendChild(newCheck);
+                } else if (!selectedTech.has(techId) && selectedCheck) {
+                    selectedCheck.remove();
+                }
             }
             
             updateStats();
@@ -1203,10 +1480,12 @@
             selectedTech.delete(techId);
             
             // อัพเดต UI
-            const techItem = document.querySelector(`[data-id="${techId}"]`);
-            if (techItem) {
-                techItem.classList.remove('selected');
-                techItem.querySelector('.tech-check').innerHTML = '+';
+            const techCard = document.querySelector(`[data-id="${techId}"]`);
+            if (techCard) {
+                techCard.classList.remove('selected');
+                techCard.querySelector('.selection-icon').innerHTML = '+';
+                const selectedCheck = techCard.querySelector('.selected-check');
+                if (selectedCheck) selectedCheck.remove();
             }
             
             updateStats();
@@ -1226,13 +1505,14 @@
             
             navigator.clipboard.writeText(codeText).then(() => {
                 // แสดงการแจ้งเตือนแบบสวยงาม
-                const originalText = document.querySelector('.btn-primary').innerHTML;
-                document.querySelector('.btn-primary').innerHTML = '<i class="fas fa-check"></i> คัดลอกแล้ว!';
-                document.querySelector('.btn-primary').style.background = '#10b981';
+                const copyBtn = document.querySelector('.btn-primary');
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> คัดลอกแล้ว!';
+                copyBtn.style.background = '#10b981';
                 
                 setTimeout(() => {
-                    document.querySelector('.btn-primary').innerHTML = originalText;
-                    document.querySelector('.btn-primary').style.background = '';
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.style.background = '';
                 }, 2000);
             }).catch(err => {
                 console.error('Failed to copy: ', err);
@@ -1260,10 +1540,16 @@
             
             selected.forEach(tech => {
                 selectedTech.add(tech.id);
-                const techItem = document.querySelector(`[data-id="${tech.id}"]`);
-                if (techItem) {
-                    techItem.classList.add('selected');
-                    techItem.querySelector('.tech-check').innerHTML = '<i class="fas fa-check"></i>';
+                const techCard = document.querySelector(`[data-id="${tech.id}"]`);
+                if (techCard) {
+                    techCard.classList.add('selected');
+                    techCard.querySelector('.selection-icon').innerHTML = '<i class="fas fa-check"></i>';
+                    
+                    // เพิ่ม selected-check
+                    const newCheck = document.createElement('div');
+                    newCheck.className = 'selected-check';
+                    newCheck.innerHTML = '<i class="fas fa-check"></i>';
+                    techCard.querySelector('.badge-container').appendChild(newCheck);
                 }
             });
             
@@ -1276,7 +1562,7 @@
         function selectPopular() {
             clearSelection();
             const popularTech = [
-                'react', 'javascript', 'python', 'nodejs', 'git', 
+                'javascript', 'react', 'python', 'nodejs', 'git', 
                 'github', 'vscode', 'docker', 'aws', 'mysql',
                 'typescript', 'tailwind', 'nextjs', 'vue', 'mongodb'
             ];
@@ -1285,10 +1571,16 @@
             popularTech.forEach(id => {
                 if (technologies.some(t => t.id === id)) {
                     selectedTech.add(id);
-                    const techItem = document.querySelector(`[data-id="${id}"]`);
-                    if (techItem) {
-                        techItem.classList.add('selected');
-                        techItem.querySelector('.tech-check').innerHTML = '<i class="fas fa-check"></i>';
+                    const techCard = document.querySelector(`[data-id="${id}"]`);
+                    if (techCard) {
+                        techCard.classList.add('selected');
+                        techCard.querySelector('.selection-icon').innerHTML = '<i class="fas fa-check"></i>';
+                        
+                        // เพิ่ม selected-check
+                        const newCheck = document.createElement('div');
+                        newCheck.className = 'selected-check';
+                        newCheck.innerHTML = '<i class="fas fa-check"></i>';
+                        techCard.querySelector('.badge-container').appendChild(newCheck);
                     }
                 }
             });
@@ -1302,12 +1594,16 @@
         function filterTechnologies() {
             const searchTerm = document.getElementById('search-box').value.toLowerCase();
             
-            if (searchTerm === '') {
-                filteredTech = [...technologies];
-            } else {
+            if (activeCategory === 'all') {
                 filteredTech = technologies.filter(tech => 
                     tech.name.toLowerCase().includes(searchTerm) || 
                     tech.category.toLowerCase().includes(searchTerm)
+                );
+            } else {
+                filteredTech = technologies.filter(tech => 
+                    tech.category === activeCategory && 
+                    (tech.name.toLowerCase().includes(searchTerm) || 
+                     tech.category.toLowerCase().includes(searchTerm))
                 );
             }
             
